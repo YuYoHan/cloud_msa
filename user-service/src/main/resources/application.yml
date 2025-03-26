@@ -5,6 +5,7 @@ spring:
   application:
     name: user-service
 
+# Eureka client 설정
 eureka:
   client:
     register-with-eureka: true
