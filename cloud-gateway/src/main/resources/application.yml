@@ -19,7 +19,12 @@ spring:
           filters:
 #            - AddRequestHeader=first-request, first-request-header2
 #            - AddResponseHeader=first-response, first-response-header2
-            - CustomFilter
+            - name: CustomFilter
+            - name: LoggingFilter
+              args:
+                baseMessage: Logging Message
+                preLogger: true
+                postLogger: true
         - id: second-service
           uri: http://localhost:8082/
           predicates:
