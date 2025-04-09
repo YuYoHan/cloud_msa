@@ -1,5 +1,6 @@
 package com.example.userservice.service;
 
+import com.example.userservice.dto.ResponseOrder;
 import com.example.userservice.dto.UserDTO;
 import com.example.userservice.entity.UserEntity;
 import com.example.userservice.repository.UserRepository;
@@ -7,11 +8,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,12 +30,43 @@ public class UserServiceImpl implements UserService{
     public UserDTO createUser(UserDTO userDTO) {
         userDTO.setUserId(UUID.randomUUID().toString());
         log.debug("userDTO {}", userDTO);
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        ModelMapper mapper = getModelMapper();
         UserEntity userEntity = mapper.map(userDTO, UserEntity.class);
         log.debug("유저 엔티티 {}", userEntity);
         userEntity.setEncryptedPw(passwordEncoder.encode(userDTO.getPw()));
         UserEntity save = userRepository.save(userEntity);
         return mapper.map(save, UserDTO.class);
+    }
+
+    private static ModelMapper getModelMapper() {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        return mapper;
+    }
+
+    @Override
+    public UserDTO getUserByUserId(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if(userEntity == null) {
+            throw new UsernameNotFoundException("user not found");
+        }
+
+        ModelMapper mapper = getModelMapper();
+        UserDTO userDTO = mapper.map(userEntity, UserDTO.class);
+
+        List<ResponseOrder> orders = new ArrayList<>();
+        userDTO.setOrders(orders);
+
+        return userDTO;
+    }
+
+    @Override
+    public Iterable<UserDTO> getUserByAll() {
+        List<UserEntity> users = userRepository.findAll();
+        ModelMapper modelMapper = getModelMapper();
+        return users.stream()
+                .map(user -> modelMapper.map(user, UserDTO.class))
+                .collect(Collectors.toList());
     }
 }
