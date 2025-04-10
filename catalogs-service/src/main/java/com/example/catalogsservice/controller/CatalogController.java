@@ -1,17 +1,14 @@
 package com.example.catalogsservice.controller;
 
-import com.example.catalogsservice.dto.CatalogDTO;
 import com.example.catalogsservice.dto.ResponseCatalog;
 import com.example.catalogsservice.service.CatalogService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
