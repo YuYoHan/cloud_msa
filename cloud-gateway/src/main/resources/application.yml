@@ -13,8 +13,8 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
-        - id: second-service
-          uri: http://localhost:8082/
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
           predicates:
             - Path=/second-service/**
           filters:
