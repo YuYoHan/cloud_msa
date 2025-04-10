@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb  # 인메모리 DB를 자동 생성
+    url: jdbc:h2:mem:testdb  # ???? DB? ?? ??
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -18,10 +18,12 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update  # 테이블 자동 생성
-    defer-datasource-initialization: true  # ⭐ 데이터베이스 초기화 지연
+      ddl-auto: create-drop  # ??? ?? ??
+    defer-datasource-initialization: true  # ? ?????? ??? ??
+    show-sql: true
+    generate-ddl: true
 
-# Eureka client 설정
+# Eureka client ??
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id}:${random.value}
@@ -33,3 +35,7 @@ eureka:
 
 greeting:
   message: Welcome to the Simple E-Commerce
+
+logging:
+  level:
+    com.example.catalogsservice: debug
