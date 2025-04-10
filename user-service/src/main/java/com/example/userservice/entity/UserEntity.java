@@ -1,16 +1,14 @@
 package com.example.userservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
+@Getter
 @Table(name = "users")
 public class UserEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
