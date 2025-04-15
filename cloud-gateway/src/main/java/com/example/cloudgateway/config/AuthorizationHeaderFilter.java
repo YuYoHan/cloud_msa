@@ -18,10 +18,16 @@ import reactor.core.publisher.Mono;
 import javax.crypto.SecretKey;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
     private final Environment env;
+
+    // Spring은 @Component로 등록된 클래스에서 생성자가 하나만 있으면,
+    // @Autowired를 붙이지 않아도 자동으로 주입해줍니다.
+    public AuthorizationHeaderFilter(Environment env) {
+        super(Config.class);       // 부모 생성자 호출
+        this.env = env;            // 의존성 주입 (생성자 주입)
+    }
 
     public static class Config {
     }
