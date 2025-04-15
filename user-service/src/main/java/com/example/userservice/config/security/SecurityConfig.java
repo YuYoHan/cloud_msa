@@ -35,7 +35,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(r ->
-                        r.requestMatchers("/users/**").permitAll());
+                        r.requestMatchers("/users/**").permitAll()
+                                .requestMatchers("/actuator/**").permitAll());
 
         http
                 .addFilter(getAuthenticationFilter());
@@ -50,7 +51,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    private AuthenticationFilter getAuthenticationFilter() throws Exception{
+    private AuthenticationFilter getAuthenticationFilter() throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(userService, env);
         authenticationFilter.setAuthenticationManager(authenticationManager());
         return authenticationFilter;
