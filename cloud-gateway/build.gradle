@@ -35,6 +35,12 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3' // JSON 직렬화/역직렬화용
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    // Spring Cloud Config Client
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    // (선택적으로) bootstrap.yml을 사용할 수 있게 해주는 starter
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 dependencyManagement {
