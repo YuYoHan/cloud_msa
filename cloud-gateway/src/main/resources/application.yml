@@ -2,6 +2,11 @@ server:
   port: 8000
 
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   application:
     name: gateway-service
 
@@ -77,7 +82,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, metrics
+        include: refresh, health, beans, metrics, bus-refresh
   metrics:
     enable:
       http.server.requests: true

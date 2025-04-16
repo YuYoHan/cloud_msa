@@ -2,6 +2,11 @@ server:
   port: 8888
 
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   application:
     name: config-service
   cloud:
@@ -11,3 +16,10 @@ spring:
           uri: https://github.com/YuYoHan/cloud_msa.git
           search-paths: git-local-repo
 #          uri: file:///C:/study_/springBoot/cloud_msa/git-local-repo
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, bus-refresh
