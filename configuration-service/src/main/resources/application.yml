@@ -8,4 +8,6 @@ spring:
     config:
       server:
         git:
-          uri: file:///C:/study_/springBoot/cloud_msa/git-local-repo
+          uri: https://github.com/YuYoHan/cloud_msa.git
+          search-paths: git-local-repo
+#          uri: file:///C:/study_/springBoot/cloud_msa/git-local-repo
