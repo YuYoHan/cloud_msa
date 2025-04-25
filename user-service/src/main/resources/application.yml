@@ -49,3 +49,5 @@ management:
       exposure:
         include: refresh, health, beans, bus-refresh
 
+order_service:
+  url: http://localhost:8000/order-service/%s/orders
