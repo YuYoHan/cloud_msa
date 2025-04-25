@@ -42,6 +42,4 @@ public class OrderController {
         List<ResponseOrder> response = orderService.getOrdersByUserId(userId);
         return ResponseEntity.ok().body(response);
     }
-
-    @GetMapping("")
 }
