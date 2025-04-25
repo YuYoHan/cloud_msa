@@ -1,0 +1,6 @@
+encrypt:
+#  key: sadasdsajkhdjsakhdsakjdhsajkdhkj123123123cxzcjh
+  key-store:
+    location: file://C:\study_\springBoot\cloud_msa\keystore\apiEncryptionKey.jks
+    password: 1q2w3e4r
+    alias: apiEncryptionKey

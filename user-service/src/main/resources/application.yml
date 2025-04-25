@@ -7,11 +7,11 @@ spring:
     port: 5672
     username: guest
     password: guest
-  datasource:
-    url: jdbc:h2:mem:testdb  # 인메모리 DB를 자동 생성
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+#  datasource:
+#    url: jdbc:h2:mem:testdb  # 인메모리 DB를 자동 생성
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password:
   application:
     name: user-service
   h2:
