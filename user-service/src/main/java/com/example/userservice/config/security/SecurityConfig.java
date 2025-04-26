@@ -1,5 +1,6 @@
 package com.example.userservice.config.security;
 
+import com.example.userservice.error.FeignErrorDecoder;
 import com.example.userservice.service.UserService;
 import feign.Logger;
 import lombok.RequiredArgsConstructor;
@@ -86,5 +87,10 @@ public class SecurityConfig {
     @Bean
     public Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;
+    }
+
+    @Bean
+    public FeignErrorDecoder getFeignErrorDecoder() {
+        return new FeignErrorDecoder();
     }
 }

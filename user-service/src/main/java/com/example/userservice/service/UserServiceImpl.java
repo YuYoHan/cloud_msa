@@ -4,6 +4,7 @@ import com.example.userservice.client.OrderServiceClient;
 import com.example.userservice.dto.ResponseOrder;
 import com.example.userservice.dto.UserDTO;
 import com.example.userservice.entity.UserEntity;
+import com.example.userservice.error.FeignErrorDecoder;
 import com.example.userservice.repository.UserRepository;
 import feign.FeignException;
 import feign.FeignException.FeignClientException;
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService{
     private final RestTemplate restTemplate;
     private final Environment env;
     private final OrderServiceClient orderServiceClient;
+    private final FeignErrorDecoder feignErrorDecoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -85,13 +87,15 @@ public class UserServiceImpl implements UserService{
 //        List<ResponseOrder> orderList = orderListResponse.getBody();
 
         // FeignClient 방법
-        List<ResponseOrder> orderList = null;
-        try {
-            orderList = orderServiceClient.getOrders(userId);
-        } catch (FeignClientException ex) {
-            log.error(ex.getMessage());
-        }
 
+//        List<ResponseOrder> orderList = null;
+//        try {
+//            orderList = orderServiceClient.getOrders(userId);
+//        } catch (FeignClientException ex) {
+//            log.error(ex.getMessage());
+//        }
+
+        List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
         userDTO.setOrders(orderList);
 
         return userDTO;
