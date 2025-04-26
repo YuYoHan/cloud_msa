@@ -1,6 +1,7 @@
 package com.example.userservice.config.security;
 
 import com.example.userservice.service.UserService;
+import feign.Logger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -80,5 +81,10 @@ public class SecurityConfig {
     @LoadBalanced
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL;
     }
 }

@@ -5,6 +5,8 @@ import com.example.userservice.dto.ResponseOrder;
 import com.example.userservice.dto.UserDTO;
 import com.example.userservice.entity.UserEntity;
 import com.example.userservice.repository.UserRepository;
+import feign.FeignException;
+import feign.FeignException.FeignClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -83,7 +85,12 @@ public class UserServiceImpl implements UserService{
 //        List<ResponseOrder> orderList = orderListResponse.getBody();
 
         // FeignClient 방법
-        List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
+        List<ResponseOrder> orderList = null;
+        try {
+            orderList = orderServiceClient.getOrders(userId);
+        } catch (FeignClientException ex) {
+            log.error(ex.getMessage());
+        }
 
         userDTO.setOrders(orderList);
 
