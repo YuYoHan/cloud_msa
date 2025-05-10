@@ -4,5 +4,7 @@ spring:
       uri: http://localhost:8888
       name: user-service
 
+kafka:
+  bootstrap-servers: kafka:9092
 #  profiles:
 #    active: dev
