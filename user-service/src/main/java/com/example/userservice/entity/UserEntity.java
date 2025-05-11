@@ -3,6 +3,8 @@ package com.example.userservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +21,8 @@ public class UserEntity {
     private String userId;
     @Column(nullable = false, unique = true)
     private String encryptedPw;
+    private String name;
+    private LocalDateTime created_at;
 
     public void setEncryptedPw(String encryptedPassword) {
         this.encryptedPw = encryptedPassword;
