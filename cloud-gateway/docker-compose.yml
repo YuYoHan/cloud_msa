@@ -1,0 +1,17 @@
+services:
+  gateway-app:
+    build:
+      context: .
+      dockerfile: dockerFile
+    container_name: gateway-app
+    ports:
+      - "8080:8080"
+    networks:
+      - msa-network
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: host.docker.internal:9092
+
+networks:
+  msa-network:
+    external: true

@@ -1,12 +1,14 @@
 package com.example.userservice.config.security;
 
 import com.example.userservice.error.FeignErrorDecoder;
+import com.example.userservice.repository.UserRepository;
 import com.example.userservice.service.UserService;
 import feign.Logger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,9 +25,9 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
-    private final UserService userService;
     private final Environment env;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final UserRepository userRepository;
 
     public static final String ALLOWED_IP_ADDRESS = "127.0.0.1";
     public static final String SUBNET = "/32";
@@ -56,15 +58,9 @@ public class SecurityConfig {
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(userService, env);
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(env, userRepository);
         authenticationFilter.setAuthenticationManager(authenticationManager());
         return authenticationFilter;
-    }
-
-    @Bean
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
     @Bean

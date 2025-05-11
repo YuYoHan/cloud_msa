@@ -21,7 +21,7 @@ spring:
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -29,7 +29,7 @@ spring:
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -37,7 +37,7 @@ spring:
             - Method=GET,POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -45,7 +45,7 @@ spring:
             - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
             - AuthorizationHeaderFilter
         - id: order-service
           uri: lb://ORDER-SERVICE
@@ -53,14 +53,14 @@ spring:
             - Path=/order-service/**
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
             - Path=/catalog-service/**
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/catalog-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
       default-filters:
         - name: GlobalFilter
           args:
@@ -73,7 +73,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-app:8761/eureka/
 
 #token:
 #  secret: user_token

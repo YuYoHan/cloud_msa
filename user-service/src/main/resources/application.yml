@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   rabbitmq:
@@ -32,7 +32,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-app:8761/eureka
 
 greeting:
   message: Welcome to the Simple E-Commerce

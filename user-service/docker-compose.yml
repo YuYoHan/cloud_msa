@@ -9,6 +9,8 @@ services:
       MYSQL_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}    # ✅ 해당 계정 비밀번호
     ports:
       - "3308:3306"
+    networks:
+      - msa-network
     volumes:
       - user-db-data:/var/lib/mysql
 
@@ -18,7 +20,9 @@ services:
       dockerfile: dockerFile
     container_name: user-app
     ports:
-      - "8081:8080"
+      - "8081:8081"
+    networks:
+      - msa-network
     depends_on:
       - user-db
     environment:
@@ -30,3 +34,7 @@ services:
 
 volumes:
   user-db-data:
+
+networks:
+  msa-network:
+    external: true

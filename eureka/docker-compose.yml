@@ -1,0 +1,17 @@
+services:
+  eureka-app:
+    build:
+      context: .
+      dockerfile: dockerFile
+    container_name: eureka-app
+    ports:
+      - "8761:8761"
+    networks:
+      - msa-network
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: host.docker.internal:9092
+
+networks:
+  msa-network:
+    external: true

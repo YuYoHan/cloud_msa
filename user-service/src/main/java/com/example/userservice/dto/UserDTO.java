@@ -1,5 +1,6 @@
 package com.example.userservice.dto;
 
+import com.example.userservice.entity.UserEntity;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -27,5 +28,12 @@ public class UserDTO {
 
     public void setOrders(List<ResponseOrder> orders) {
         this.orders.addAll(orders);
+    }
+
+    public static UserDTO change(UserEntity user) {
+        return UserDTO.builder()
+                .email(user.getEmail())
+                .userId(user.getUserId())
+                .build();
     }
 }

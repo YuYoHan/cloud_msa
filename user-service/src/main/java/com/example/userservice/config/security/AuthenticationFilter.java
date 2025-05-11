@@ -2,6 +2,8 @@ package com.example.userservice.config.security;
 
 import com.example.userservice.dto.RequestLogin;
 import com.example.userservice.dto.UserDTO;
+import com.example.userservice.entity.UserEntity;
+import com.example.userservice.repository.UserRepository;
 import com.example.userservice.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
@@ -27,8 +29,8 @@ import java.util.Date;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private final UserService userService;
     private final Environment env;
+    private final UserRepository userRepository;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -51,7 +53,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication authResult) throws IOException, ServletException {
         log.debug(((User) authResult.getPrincipal()).getUsername());
         String email = ((User) authResult.getPrincipal()).getUsername();
-        UserDTO userDetails = userService.getUserDetailsByEmail(email);
+        UserEntity userEntity = userRepository.findByEmail(email);
+        UserDTO userDetails = UserDTO.change(userEntity);
         log.debug("userDetails {}", userDetails);
 
         Key key = Keys.hmacShaKeyFor(env.getProperty("token.secret").getBytes());
