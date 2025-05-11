@@ -18,6 +18,7 @@ public class UserDTO {
     private String userId;
     private Date createAt;
     private String encryptedPw;
+    @Builder.Default
     private List<ResponseOrder> orders = new ArrayList<>();
 
     public void setUserId(String randomUUID) {

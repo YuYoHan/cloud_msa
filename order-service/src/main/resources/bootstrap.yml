@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: order-service
+
+kafka:
+  bootstrap-servers: kafka:9092
+#  profiles:
+#    active: dev

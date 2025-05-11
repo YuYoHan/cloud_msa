@@ -1,0 +1,32 @@
+services:
+  order-db:
+    image: mysql:8
+    container_name: order-db
+    environment:
+      MYSQL_DATABASE: orderdb
+      MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      MYSQL_USER: ${SPRING_DATASOURCE_USERNAME}        # ✅ 자동 사용자 생성
+      MYSQL_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}    # ✅ 해당 계정 비밀번호
+    ports:
+      - "3309:3306"
+    volumes:
+      - order-db-data:/var/lib/mysql
+
+  order-app:
+    build:
+      context: .
+      dockerfile: dockerFile
+    container_name: order-app
+    ports:
+      - "8081:8081"
+    depends_on:
+      - order-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://order-db:3306/orderdb
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: host.docker.internal:9092
+
+volumes:
+  order-db-data:
