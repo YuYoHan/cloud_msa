@@ -4,6 +4,8 @@ services:
     container_name: zookeeper
     ports:
       - "2181:2181"
+    networks:
+      - msa-network
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -14,6 +16,8 @@ services:
     ports:
       - "9092:9092"
       - "29092:29092"  # 내부 통신용
+    networks:
+      - msa-network
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -21,15 +25,21 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     depends_on:
       - zookeeper
 
   kafka-connect:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: confluentinc/cp-kafka-connect:7.5.0
     depends_on:
       - kafka
     ports:
       - "8083:8083"
+    networks:
+      - msa-network
     environment:
       CONNECT_BOOTSTRAP_SERVERS: kafka:29092
       CONNECT_REST_PORT: 8083
@@ -46,3 +56,8 @@ services:
       CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
+      CONNECT_PLUGIN_PATH: "/usr/share/confluent-hub-components/confluentinc-kafka-connect-jdbc,/usr/share/java"
+
+networks:
+  msa-network:
+    external: true

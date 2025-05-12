@@ -1,0 +1,40 @@
+services:
+  catalog-db:
+    image: mysql:8
+    container_name: catalog-db
+    environment:
+      MYSQL_DATABASE: catalogdb
+      MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      MYSQL_USER: ${SPRING_DATASOURCE_USERNAME}        # ✅ 자동 사용자 생성
+      MYSQL_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}    # ✅ 해당 계정 비밀번호
+    ports:
+      - "3310:3306"
+    networks:
+      - msa-network
+    volumes:
+      - catalog-db-data:/var/lib/mysql
+
+  catalog-app:
+    build:
+      context: .
+      dockerfile: dockerFile
+    container_name: catalog-app
+    ports:
+      - "8084:8084"
+    networks:
+      - msa-network
+    depends_on:
+      - catalog-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://catalog-db:3306/catalogdb
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: host.docker.internal:9092
+
+volumes:
+  catalog-db-data:
+
+networks:
+  msa-network:
+    external: true

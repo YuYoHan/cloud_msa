@@ -33,4 +33,8 @@ public class CalalogEntity implements Serializable {
     // 티티를 저장할 때 JPA는 이 필드에 값을 넣지 않고, DB에서 자동으로 현재 시간이 들어가게 합니다.
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private Date createdAt;
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
 }
