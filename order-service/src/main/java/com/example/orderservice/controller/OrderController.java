@@ -1,5 +1,6 @@
 package com.example.orderservice.controller;
 
+import com.example.orderservice.config.KafkaProducer;
 import com.example.orderservice.dto.OrderDTO;
 import com.example.orderservice.dto.RequestOrder;
 import com.example.orderservice.dto.ResponseOrder;
@@ -19,6 +20,7 @@ import java.util.List;
 public class OrderController {
     private final Environment env;
     private final OrderService orderService;
+    private final KafkaProducer kafkaProducer;
 
     @GetMapping("/health_check")
     public String status() {
@@ -34,6 +36,10 @@ public class OrderController {
         OrderDTO orderDTO = mapper.map(order, OrderDTO.class);
         orderDTO.setUserId(userId);
         ResponseOrder responseOrder = orderService.createdOrder(orderDTO);
+
+        // 주문 데이터를 Kafka에 보내기
+        kafkaProducer.send("example-order-topic", orderDTO);
+
         return ResponseEntity.ok().body(responseOrder);
     }
 
