@@ -28,6 +28,7 @@ tasks.withType(Test) {
 }
 ext {
     set('springCloudVersion', "2024.0.1")
+    set('springBootVersion', '3.2.4')
 }
 
 dependencies {
@@ -58,6 +59,9 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     // Kafka
     implementation 'org.springframework.kafka:spring-kafka'
+    // Resilience4j 기반 Circuit Breaker
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3'
 
 }
 
