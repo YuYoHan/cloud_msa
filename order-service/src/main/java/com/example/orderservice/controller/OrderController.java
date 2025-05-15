@@ -7,6 +7,7 @@ import com.example.orderservice.dto.RequestOrder;
 import com.example.orderservice.dto.ResponseOrder;
 import com.example.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.env.Environment;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/order-service")
+@Slf4j
 public class OrderController {
     private final Environment env;
     private final OrderService orderService;
@@ -58,8 +60,10 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}/orders")
-    public ResponseEntity<?> createOrder(@PathVariable("userId")String userId) {
+    public ResponseEntity<?> getOrders(@PathVariable("userId")String userId) {
+        log.debug("Before call orders microservice");
         List<ResponseOrder> response = orderService.getOrdersByUserId(userId);
+        log.debug("After called orders microservice");
         return ResponseEntity.ok().body(response);
     }
 }

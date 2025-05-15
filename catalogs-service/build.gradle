@@ -30,6 +30,7 @@ tasks.withType(Test) {
 
 ext {
     set('springCloudVersion', "2024.0.1")
+    set('springBootVersion', '3.2.4')
 }
 
 dependencies {
@@ -47,6 +48,14 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33' // 예시 버전
     // Kafka
     implementation 'org.springframework.kafka:spring-kafka'
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // Resilience4j 기반 Circuit Breaker
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3'
+    // Micrometer Tracing + Zipkin (Brave 기반)
+    implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+    implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
 }
 
 dependencyManagement {

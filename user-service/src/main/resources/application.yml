@@ -42,10 +42,16 @@ greeting:
 #  secret: user_token
 
 management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411
+  tracing:
+    sampling:
+      probability: 1.0  # 전체 요청 추적
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, bus-refresh
+        include: refresh, health, beans, bus-refresh, info, metrics, loggers, trace
 
 logging:
   level:

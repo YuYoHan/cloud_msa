@@ -92,8 +92,10 @@ public class UserServiceImpl implements UserService{
 //            log.error(ex.getMessage());
 //        }
 
+        log.debug("Before call orders microservice");
         List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
         userDTO.setOrders(orderList);
+        log.debug("After called orders microservice");
 
         return userDTO;
     }

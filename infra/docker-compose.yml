@@ -1,4 +1,10 @@
 services:
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - msa-network
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper

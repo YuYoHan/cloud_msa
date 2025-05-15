@@ -32,3 +32,30 @@ greeting:
 logging:
   level:
     com.example.orderservice: debug
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      orderService:
+        # /actuator/health에서 Circuit Breaker 상태 확인 가능하게 함
+        registerHealthIndicator: true
+        # 최근 10번의 호출 결과를 기준으로 실패율을 측정
+        slidingWindowSize: 10
+        # 실패율이 50% 이상이면 Circuit Breaker가 열림 (OPEN) 상태로 전환
+        failureRateThreshold: 50
+        # OPEN 상태에서 10초 동안 기다린 후, Half-Open 상태로 전환 시도
+        waitDurationInOpenState: 10s
+        # Half-Open 상태에서 최대 3번 호출을 시도하고, 모두 성공하면 Circuit 닫힘(Closed)
+        permittedNumberOfCallsInHalfOpenState: 3
+
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411
+  tracing:
+    sampling:
+      probability: 1.0  # 전체 요청 추적
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, bus-refresh, info, metrics, loggers, trace

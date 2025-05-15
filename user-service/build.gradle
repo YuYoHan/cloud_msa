@@ -62,7 +62,12 @@ dependencies {
     // Resilience4j 기반 Circuit Breaker
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
     implementation 'io.github.resilience4j:resilience4j-spring-boot3'
-
+    // Micrometer Tracing + Zipkin (Brave 기반)
+    // 구체적인 구현체와 전송기 역할
+    implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+    implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+    // 기본 추상화 레이어
+    implementation 'io.micrometer:micrometer-observation'
 }
 
 dependencyManagement {
