@@ -28,6 +28,8 @@ spring:
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id}:${random.value}
+    prefer-ip-address: false
+    hostname: user-app
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -51,7 +53,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, bus-refresh, info, metrics, loggers, trace
+        include: refresh, health, beans, bus-refresh, info, loggers, trace, prometheus, metrics
 
 logging:
   level:

@@ -1,0 +1,26 @@
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: 'user-service'
+    scrape_interval: 15s
+    metrics_path: '/user-service/actuator/prometheus'
+    static_configs:
+      # docker container 이름 : gateway
+      - targets: ['gateway-app:8080']
+  - job_name: 'order-service'
+    scrape_interval: 15s
+    metrics_path: '/order-service/actuator/prometheus'
+    static_configs:
+      - targets: [ 'gateway-app:8080' ]
+  - job_name: 'catalog-service'
+    scrape_interval: 15s
+    metrics_path: '/catalog-service/actuator/prometheus'
+    static_configs:
+      - targets: [ 'gateway-app:8080' ]
+  - job_name: 'gateway-service'
+    scrape_interval: 15s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'gateway-app:8080' ]

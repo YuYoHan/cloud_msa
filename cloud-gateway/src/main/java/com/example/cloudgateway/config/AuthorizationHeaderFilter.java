@@ -35,6 +35,13 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
+            String path = exchange.getRequest().getURI().getPath();
+
+            // ✅ public 경로는 인증 필터 우회
+            if (path.startsWith("/user-service/api/v1/login") || path.startsWith("/user-service/api/v1/users")) {
+                return chain.filter(exchange);
+            }
+
             ServerHttpRequest request = exchange.getRequest();
 
             if(!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {

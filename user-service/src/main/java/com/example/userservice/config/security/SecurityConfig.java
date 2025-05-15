@@ -41,7 +41,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(r ->
-                        r.requestMatchers("/users/**").permitAll()
+                        r.requestMatchers("/api/v1/users").permitAll()
                                 .requestMatchers("/actuator/**").permitAll());
 
         http
@@ -60,6 +60,8 @@ public class SecurityConfig {
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(env, userRepository);
         authenticationFilter.setAuthenticationManager(authenticationManager());
+        // 🔥 이 한 줄을 반드시 추가해야 Gateway에서 오는 /api/v1/login 경로에서 필터가 작동합니다.
+        authenticationFilter.setFilterProcessesUrl("/api/v1/login");
         return authenticationFilter;
     }
 

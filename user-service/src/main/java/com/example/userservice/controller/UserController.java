@@ -5,6 +5,7 @@ import com.example.userservice.dto.ResponseUser;
 import com.example.userservice.dto.UserDTO;
 import com.example.userservice.service.UserService;
 import com.example.userservice.vo.Greeting;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user-service")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
@@ -27,6 +28,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/health_check")
+    @Timed(value = "users.status", longTask = true)
     public String status() {
         return String.format("It's working in User Service " +
                 ", port(local.server.port) = " + env.getProperty("local.server.port") +

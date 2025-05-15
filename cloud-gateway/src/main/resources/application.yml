@@ -1,5 +1,5 @@
 server:
-  port: 8000
+  port: 8080
 
 spring:
   rabbitmq:
@@ -17,19 +17,19 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/login
+            - Path=/user-service/api/v1/login
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /${segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/users
+            - Path=/user-service/api/v1/users
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /${segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -37,7 +37,7 @@ spring:
             - Method=GET,POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /${segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -45,7 +45,7 @@ spring:
             - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /${segment}
             - AuthorizationHeaderFilter
         - id: order-service
           uri: lb://ORDER-SERVICE
@@ -53,14 +53,30 @@ spring:
             - Path=/order-service/**
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
+            - RewritePath=/order-service/(?<segment>.*), /${segment}
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order-service/actuator/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/order-service/(?<segment>.*), /${segment}
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
             - Path=/catalog-service/**
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\\{segment}
+            - RewritePath=/catalog-service/(?<segment>.*), /${segment}
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/catalog-service/actuator/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/catalog-service/(?<segment>.*), /${segment}
       default-filters:
         - name: GlobalFilter
           args:
@@ -82,7 +98,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, metrics, bus-refresh
+        include: refresh, health, beans, metrics, bus-refresh, info, prometheus, metrics
   metrics:
     enable:
       http.server.requests: true
