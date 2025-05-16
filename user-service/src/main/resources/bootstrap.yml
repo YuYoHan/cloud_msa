@@ -1,10 +1,6 @@
 spring:
   cloud:
     config:
-      uri: http://localhost:8888
+      uri: http://config-app:8888
       name: user-service
-
-kafka:
-  bootstrap-servers: kafka:9092
-#  profiles:
-#    active: dev
+  

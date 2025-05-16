@@ -1,17 +1,10 @@
 services:
-  rabbitmq:
-    image: rabbitmq:4.0-management  # 관리 UI가 포함된 버전
-    container_name: rabbitmq
-    restart: always
+  config-app:
+    build:
+      context: .
+      dockerfile: dockerFile
+    container_name: config-app
     ports:
-      - "5672:5672"  # AMQP 프로토콜 포트
-      - "15672:15672"  # 관리 UI 포트
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq  # 데이터 영속성 유지
-
-volumes:
-  rabbitmq_data:
-    driver: local
+      - "8888:8888"
+    networks:
+      - msa-network
