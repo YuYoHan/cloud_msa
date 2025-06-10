@@ -12,3 +12,35 @@ eureka:
     fetch-registry: false # 디스커버리 등록기에 자기자신(서비스) 등록 여부
   server:
     wait-time-in-ms-when-sync-empty: 5 # 서버가 요청 받기 전 대기할 초기 시간
+
+---
+spring:
+  config:
+    activate:
+      on-profile: eureka2
+
+server:
+  port: 8762
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://DOWONui-MacBookPro.local:8763/eureka/
+  instance:
+    hostname: localhost
+
+---
+spring:
+  config:
+    activate:
+      on-profile: eureka3
+
+server:
+  port: 8762
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8762/eureka/
+  instance:
+    hostname: DOWONui-MacBookPro.local
