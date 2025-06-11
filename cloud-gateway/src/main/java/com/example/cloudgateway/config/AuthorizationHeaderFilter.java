@@ -1,5 +1,6 @@
 package com.example.cloudgateway.config;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -48,14 +49,41 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                 return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
             }
 
-            String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-            String jwt = authorizationHeader.replace("Bearer","");
+            String authorizationHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+            String jwt = authorizationHeader.replace("Bearer","").trim();
 
             if(!isJwtValid(jwt)) {
                 return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
             }
 
-            return chain.filter(exchange);
+            // ✅ JWT 검증 및 사용자 정보 추출
+            Claims claims;
+            try {
+                String secret = env.getProperty("token.secret");
+                SecretKey key = Keys.hmacShaKeyFor(secret.getBytes());
+
+                claims = Jwts.parser()
+                        .verifyWith(key)
+                        .build()
+                        .parseSignedClaims(jwt)
+                        .getPayload();
+
+            } catch (Exception e) {
+                return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
+            }
+
+            String userId = claims.getSubject(); // 일반적으로 userId
+            String email = claims.get("email", String.class);
+            String role = claims.get("role", String.class);
+
+            // ✅ 새로운 요청에 유저 정보 헤더 추가
+            ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
+                    .header("X-User-Id", userId)
+                    .header("X-User-Email", email)
+                    .header("X-User-Role", role)
+                    .build();
+
+            return chain.filter(exchange.mutate().request(modifiedRequest).build());
         });
     }
 

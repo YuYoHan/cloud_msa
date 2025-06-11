@@ -1,6 +1,14 @@
 server:
   port: 8080
 
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-app:8761/eureka/
+
+
 spring:
   rabbitmq:
     host: localhost
@@ -54,6 +62,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/order-service/(?<segment>.*), /${segment}
+            - name: AuthorizationHeaderFilter
         - id: order-service
           uri: lb://ORDER-SERVICE
           predicates:
@@ -69,6 +78,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/catalog-service/(?<segment>.*), /${segment}
+            - name: AuthorizationHeaderFilter
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
@@ -84,12 +94,7 @@ spring:
             preLogger: true
             postLogger: true
 
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://eureka-app:8761/eureka/
+
 
 #token:
 #  secret: user_token
